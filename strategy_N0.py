@@ -101,9 +101,8 @@ def strategy(binance_df:pd.DataFrame,
 
 if __name__=="__main__":
 
-    binance_df=bn_data.dataframe_trans_2(bn_data.get_the_last_200_days_info(cf.FUTURES_CRYPTO,cf.PERIOD,cf.N_DAYS))
+    binance_df=bn_data.dataframe_trans_2(bn_data.get_the_last_200_days_info("BTCUSD_PERP","5m",30))
     print(binance_df.head(5)) 
-
     print (strategy(binance_df=binance_df,
                     high_sma_sample=cf.STG0_HIGH_SMA_SAMPLE,
                     high_sma_offset=cf.STG0_HIGH_SMA_OFFSET,

@@ -79,8 +79,9 @@ def get_the_last_200_days_info(crypto:str,period:str,n_days=int)->pd.DataFrame:
         fecha_resultado = fecha_actual - dias_a_restar
 
         start_time=str_to_unix_time(fecha_resultado.strftime('%Y,%m,%d'))
-
+        
         finish_time=str_to_unix_time(fecha_actual.strftime('%Y,%m,%d'))
+
         client = CMFutures(key=cf.FUTURES_API_KEY, secret=cf.FUTURES_SECRET_KEY)
 
         output_df=pd.DataFrame()
@@ -89,6 +90,7 @@ def get_the_last_200_days_info(crypto:str,period:str,n_days=int)->pd.DataFrame:
         #debemos traer desde atras para adelante los valores, para poder armar todo el dataframe
 
         binance_df=pd.DataFrame(client.klines(symbol=crypto,interval=period,startTime=start_time,endTime=finish_time))
+
         binance_titles=["Open time","Open","High","Low","Close","Volume","Close time","Quote asset volume","Number of trades","Taker buy base asset volume","Taker buy quote asset volume","ignore"]
         binance_df.columns=binance_titles
 
@@ -98,6 +100,8 @@ def get_the_last_200_days_info(crypto:str,period:str,n_days=int)->pd.DataFrame:
         final_requested_unix_time=dict(binance_df.iloc[499])["Open time"]#contenido de la ultima vela
 
         output_df=binance_df
+
+
         if inicial_requested_unix_time>=start_time:
             repeat=True
             while repeat==True:
@@ -187,15 +191,38 @@ def dataframe_trans_to_testing(dataframe:pd.DataFrame)->pd.DataFrame:
 
     return dataframe
 
+def dataframe_trans_2(dataframe:pd.DataFrame)->pd.DataFrame:
+    """Convierte directo de binance a un formato aplicable al testing"""
+
+    #En caso de existir indices duplicados , los eliminamos
+    dataframe.drop_duplicates()
+
+    # Selecciona todas las filas y las 6 primeras columnas, y nos queda asi
+    #["Open time","Open","High","Low","Close","Volume"]
+    dataframe = dataframe.iloc[:, :6]
+
+    #convertimos la primera fila que esta en formato unix time ms a datetime
+    dataframe["Open time"] = pd.to_datetime(dataframe["Open time"], unit='ms')
+ 
+    dataframe["Open"] = dataframe["Open"].astype(float)
+    dataframe["High"] = dataframe["High"].astype(float)
+    dataframe["Low"] = dataframe["Low"].astype(float)
+    dataframe["Close"] = dataframe["Close"].astype(float)
+    dataframe["Volume"] = dataframe["Volume"].astype(float)
+
+    dataframe.rename(columns={'Open time': 'Time'},inplace=True)
+
+    return dataframe
+
 if __name__=="__main__":
 
     print(get_lista_cryptos())
     print(get_lista_timeframes())
-    print(get_the_last_200_days_info("BTCUSDT_PERP","5m",30))
+    print(get_the_last_200_days_info("BTCUSD_PERP","5m",30))
+    print(dataframe_trans_2(get_the_last_200_days_info("BTCUSD_PERP","5m",30)))
 
 
-    
-   
+
 
 
 
