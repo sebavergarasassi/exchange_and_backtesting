@@ -29,6 +29,10 @@ class OP():
             for value in candel_values:
                 if value>self.op_reference_price:
                     confirmed=True
+                    self.index_in=i
+                    self.price_in=value
+                    self.time_in=df.index[i]
+                    self.status="Open"
             return confirmed
         
         if self.type=="sell":
@@ -38,6 +42,10 @@ class OP():
             for value in candel_values:
                 if value<self.op_reference_price:
                     confirmed=True
+                    self.index_in=i
+                    self.price_in=value
+                    self.time_in=df.index[i]
+                    self.status="Open"
             return confirmed
         
     def open_op(self,i:int,df:pd.DataFrame):

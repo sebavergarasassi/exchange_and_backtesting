@@ -6,7 +6,7 @@ FUTURES_SECRET_KEY="wwV8fq890wXzaPuHK91q0Vdo2OnCvPAbd51SwQ5PhyNbsMFzCT9G59T07is0
 #AvAILABLE TIMEFRAMES
 #(#1S IS NOT OPERABLE)
 
-PERIODS = ["1m","3m","5m","15m","30m","1h","2h","4h","6h","8h","12h","1d","3d","1w","1M"]
+PERIODS = ["1m","3m","5m","15m","30m"]#,"1h","2h","4h","6h","8h","12h","1d","3d","1w","1M"]
 
 #DEFAULT SETUP
 

@@ -51,41 +51,49 @@ def strategy(binance_df:pd.DataFrame,
             #esperamos una confirmacion de compra
             if schemas.OP.op_confirmed(op_b,i=i,df=binance_df)==True:
                 #compra confirmada!!!
-                schemas.OP.open_op(op_b,i=i,df=binance_df)
+
                 OP_B.append(op_b)
                 buy_status="Open"
         #3)
-        elif buy_status=="Open":
+        elif binance_df["Close"][i]<binance_df["offset_low_SMA"][i]:
+            if buy_status=="Open":
             #esperamos señal de salida
-            if binance_df["Close"][i]<binance_df["offset_low_SMA"][i]:
+
                 for op_b in OP_B:
                     if op_b.status=="Open":
                         schemas.OP.close_op(op_b,i,binance_df["Close"][i],binance_df)
                         buy_status="Closed"
+            elif buy_status=="pre_open":
+                buy_status="Closed"
+
         
         #SELL:
         #4)
         if sell_status=="Closed":
-            #esperamos una señal de compra
+            #esperamos una señal de venta
             if binance_df["Close"][i]<binance_df["offset_low_SMA"][i]:
                 sell_status="pre_open"
                 op_s=schemas.OP(type="sell",op_reference_index=i,df=binance_df)
         #5)
         elif sell_status=="pre_open":
-            #esperamos una confirmacion de compra
+            #esperamos una confirmacion deventa
             if schemas.OP.op_confirmed(op_s,i=i,df=binance_df)==True:
                 #compra confirmada!!!
-                schemas.OP.open_op(op_s,i=i,df=binance_df)
+
                 OP_S.append(op_s)
                 sell_status="Open"
         #6)
-        elif sell_status=="Open":
-            #esperamos señal de salida
-            if binance_df["Close"][i]>binance_df["offset_high_SMA"][i]:
+        elif binance_df["Close"][i]>binance_df["offset_high_SMA"][i]:
+            if sell_status=="Open":
+                #esperamos señal de salida
+                
                 for op_s in OP_S:
                     if op_s.status=="Open":
                         schemas.OP.close_op(op_s,i,binance_df["Close"][i],binance_df)
                         sell_status="Closed"
+            elif sell_status=="pre_open":
+                sell_status="Closed"
+
 
 
     ALL_OP=OP_B+OP_S
