@@ -12,12 +12,12 @@ class SMA():
         
 class OP():
 
-    def __init__(self,type:str,op_reference_index:int,df:pd.DataFrame):
+    def __init__(self,type:str,op_signal_index:int,df:pd.DataFrame):
         self.type=type#buy or sell
         self.status="pre_Open"
-        self.op_reference_index=op_reference_index
-        self.op_reference_price=df["Close"][op_reference_index]
-        self.op_reference_time=df.index[op_reference_index]
+        self.op_signal_index=op_signal_index
+        self.op_signal_price=df["Close"][op_signal_index]
+        self.op_signal_time=df.index[op_signal_index]
 
     def op_confirmed(self,i:int,df:pd.DataFrame):
         #df:indeX['Open', 'High', 'Low', 'Close', 'Volume', 'high_SMA','low_SMA']
@@ -27,7 +27,7 @@ class OP():
             confirmed=False
             #debemos analizar los valores, si alguno es mayor, abre la operacion
             for value in candel_values:
-                if value>self.op_reference_price:
+                if value>self.op_signal_price:
                     confirmed=True
                     self.index_in=i
                     self.price_in=value
@@ -40,7 +40,7 @@ class OP():
             confirmed=False
             #debemos analizar los valores, si alguno es menor, abre la operacion
             for value in candel_values:
-                if value<self.op_reference_price:
+                if value<self.op_signal_price:
                     confirmed=True
                     self.index_in=i
                     self.price_in=value

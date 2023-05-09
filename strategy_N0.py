@@ -45,7 +45,7 @@ def strategy(binance_df:pd.DataFrame,
             #esperamos una señal de compra
             if binance_df["Close"][i]>binance_df["offset_high_SMA"][i]:
                 buy_status="pre_open"
-                op_b=schemas.OP(type="buy",op_reference_index=i,df=binance_df)
+                op_b=schemas.OP(type="buy",op_signal_index=i,df=binance_df)
         #2)
         elif buy_status=="pre_open":
             #esperamos una confirmacion de compra
@@ -73,7 +73,7 @@ def strategy(binance_df:pd.DataFrame,
             #esperamos una señal de venta
             if binance_df["Close"][i]<binance_df["offset_low_SMA"][i]:
                 sell_status="pre_open"
-                op_s=schemas.OP(type="sell",op_reference_index=i,df=binance_df)
+                op_s=schemas.OP(type="sell",op_signal_index=i,df=binance_df)
         #5)
         elif sell_status=="pre_open":
             #esperamos una confirmacion deventa

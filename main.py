@@ -157,7 +157,7 @@ def descargar_configuracion_exchange_actual(db: Session = Depends(get_db)):
     
 @app.get("/exchange/descarga/",tags=["Exchange-download"])
 def descargar_OHLC_desde_DB_local(db: Session = Depends(get_db)):
-    """genera un archivo con los valores OHLC"""
+    """genera un archivo con los valores OHLCV"""
 
     #debemos chequear que existen los valores de OHLC en la db_local (tabal de exchange data)
     db_exhcange_data=crud.check_exchange_data(db)

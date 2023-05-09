@@ -32,8 +32,8 @@ class Configuracion_exchange_base(BaseModel):
     #MAIN
     #el tipo conint represeta los limites inferior y superior 
     n_days: conint(ge=1, le=200)=cf.N_DAYS #---> El numero de dias debe estar comprendido entre 1 y 200 dias
-    period_id:conint(ge=1,le=bn_data.get_lista_cryptos().shape[0])=cf.PERIOD#---> El limite superior de id_cryptos es movil y depende de los pares que la plataforma tenga disponibles
-    crypto_id:conint(ge=1,le=bn_data.get_lista_timeframes().shape[0])=cf.FUTURES_CRYPTO#---> El limite superior depende de los timeframe operables habilitatos en config
+    period_id:conint(ge=1,le=bn_data.get_lista_timeframes().shape[0])=cf.PERIOD#---> El limite superior de id_cryptos es movil y depende de los pares que la plataforma tenga disponibles
+    crypto_id:conint(ge=1,le=bn_data.get_lista_cryptos().shape[0])=cf.FUTURES_CRYPTO#---> El limite superior depende de los timeframe operables habilitatos en config
  
 class Configuracion_exchange(Configuracion_exchange_base):
     id:int
@@ -67,9 +67,9 @@ class Configuracion_strategy_N0_base(BaseModel):
     #SIMPLE_MOVING_AVERAGE_SETUP
     #adoptamos como valor superior 1000, a modo practico, pero podria adoptarse uno superior
     high_sma_sample: conint(ge=1, le=1000)=cf.STG0_HIGH_SMA_SAMPLE
-    high_sma_offset:conint(ge=1, le=1000)=cf.STG0_HIGH_SMA_OFFSET
+    high_sma_offset:conint(ge=0, le=1000)=cf.STG0_HIGH_SMA_OFFSET
     low_sma_sample:conint(ge=1, le=1000)=cf.STG0_LOW_SMA_SAMPLE
-    low_sma_offset:conint(ge=1, le=1000)=cf.STG0_SLOW_SMA_OFFSET
+    low_sma_offset:conint(ge=0, le=1000)=cf.STG0_SLOW_SMA_OFFSET
 
 class Configuracion_strategy_N0(Configuracion_strategy_N0_base):
     id:int
